@@ -6,9 +6,9 @@
   GoStack Challenge 07: Store-like React App
 </h3>
 
-<h1 align="center">
+<div align="center">
   <img alt="Rocketshoes" src="src/assets/app.png" width="882px" />
-</h1>
+</div>
 
 ### Challenge
 
