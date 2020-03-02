@@ -9,7 +9,7 @@ export const Product = styled.View`
   background: #fff;
   padding: 10px;
   margin: 15px;
-  width: 220px;
+  width: 240px;
   border-radius: 4px;
 `;
 

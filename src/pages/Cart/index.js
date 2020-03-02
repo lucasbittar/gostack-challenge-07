@@ -1,37 +1,58 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import {formatPrice} from '../../util/format';
+import * as CartActions from '../../store/modules/cart/actions';
+
 import {
-  Container,
-  Products,
-  Product,
-  ProductInfo,
-  ProductImage,
-  ProductDetails,
-  ProductTitle,
-  ProductPrice,
-  ProductDelete,
-  ProductActions,
-  ProductActionsButton,
-  ProductQuantity,
-  ProductSubtotal,
-  TotalContainer,
-  TotalText,
-  TotalAmount,
   Checkout,
   CheckoutText,
+  Container,
   EmptyContainer,
   EmptyText,
+  Product,
+  ProductActions,
+  ProductActionsButton,
+  ProductDelete,
+  ProductDetails,
+  ProductImage,
+  ProductInfo,
+  ProductPrice,
+  ProductQuantity,
+  ProductSubtotal,
+  ProductTitle,
+  Products,
+  ShopNowButton,
+  ShopNowButtonText,
+  TotalAmount,
+  TotalContainer,
+  TotalText,
 } from './styles';
 
-function Cart() {
+function Cart({
+  navigation,
+  cart,
+  total,
+  updateQuantityRequest,
+  removeFromCart,
+}) {
+  function decrement(product) {
+    updateQuantityRequest(product.id, product.quantity - 1);
+  }
+
+  function increment(product) {
+    updateQuantityRequest(product.id, product.quantity + 1);
+  }
+
   return (
     <Container>
-      {products.length ? (
+      {cart.length ? (
         <>
           <Products>
-            {products.map(product => (
+            {cart.map(product => (
               <Product key={product.id}>
                 <ProductInfo>
                   <ProductImage source={{uri: product.image}} />
@@ -51,7 +72,7 @@ function Cart() {
                       color="#7159c1"
                     />
                   </ProductActionsButton>
-                  <ProductQuantity value={String(product.amount)} />
+                  <ProductQuantity value={String(product.quantity)} />
                   <ProductActionsButton onPress={() => increment(product)}>
                     <Icon name="add-circle-outline" size={20} color="#7159c1" />
                   </ProductActionsButton>
@@ -72,10 +93,33 @@ function Cart() {
         <EmptyContainer>
           <Icon name="remove-shopping-cart" size={64} color="#eee" />
           <EmptyText>Your cart is empty.</EmptyText>
+          <ShopNowButton onPress={() => navigation.navigate('Home')}>
+            <ShopNowButtonText>Shop Now</ShopNowButtonText>
+          </ShopNowButton>
         </EmptyContainer>
       )}
     </Container>
   );
 }
 
-export default Cart;
+const mapStateToProps = state => ({
+  cart: state.cart.map(product => ({
+    ...product,
+    subtotal: formatPrice(product.price * product.quantity),
+    formattedPrice: formatPrice(product.price),
+  })),
+  total: formatPrice(
+    state.cart.reduce(
+      (total, product) => total + product.price * product.quantity,
+      0,
+    ),
+  ),
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(CartActions, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Cart);

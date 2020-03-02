@@ -9,13 +9,19 @@ import './config/ReactotronConfig';
 import store from './store';
 
 import Routes from './routes';
+import Navigation from './services/navigation';
+
+// navigatorRef => Navigation.setNavigator(navigatorRef)
+const myRef = ref => {
+  console.tron.log('REF');
+};
 
 const App = () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
         <StatusBar barStyle="light-content" />
-        <Routes />
+        <Routes ref={ref => myRef(ref)} />
       </NavigationContainer>
     </Provider>
   );

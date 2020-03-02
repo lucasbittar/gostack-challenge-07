@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import {FlatList} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {formatPrice} from '../../util/format';
 import api from '../../services/api';
+import * as CartActions from '../../store/modules/cart/actions';
 
 import {
   Container,
@@ -36,22 +38,23 @@ class Home extends Component {
     this.setState({products: data});
   };
 
-  handleAddtoCart = product => {
-    const {dispatch} = this.props;
-    console.tron.log('HEY!');
-    dispatch({type: '@cart/ADD_ITEM', product});
+  handleAddtoCart = id => {
+    const {addToCartRequest} = this.props;
+    addToCartRequest(id);
   };
 
   renderProductTile = ({item}) => {
+    const {quantity} = this.props;
+
     return (
       <Product key={item.id}>
         <ProductImage source={{uri: item.image}} />
         <ProductTitle>{item.title}</ProductTitle>
         <ProductPrice>{item.formattedPrice}</ProductPrice>
-        <AddToCartButton onPress={() => this.handleAddtoCart(item)}>
+        <AddToCartButton onPress={() => this.handleAddtoCart(item.id)}>
           <ProductQuantity>
             <Icon name="add-shopping-cart" color="#fff" size={20} />
-            <ProductQuantityText>1</ProductQuantityText>
+            <ProductQuantityText>{quantity[item.id] || 0}</ProductQuantityText>
           </ProductQuantity>
           <AddToCartButtonText>Add to cart</AddToCartButtonText>
         </AddToCartButton>
@@ -75,4 +78,17 @@ class Home extends Component {
   }
 }
 
-export default connect()(Home);
+const mapStateToProps = state => ({
+  quantity: state.cart.reduce((quantity, product) => {
+    quantity[product.id] = product.quantity;
+    return quantity;
+  }, {}),
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(CartActions, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Home);

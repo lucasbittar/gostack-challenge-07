@@ -1,14 +1,15 @@
-import {NavigationActions} from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 
-let navigator;
+let navigation;
 
 function setNavigator(ref) {
-  navigator = ref;
+  console.tron.log('REF', ref);
+  navigation = ref;
 }
 
 function navigate(routeName, params) {
-  navigator.dispatch(
-    NavigationActions.navigate({
+  navigation.dispatch(
+    CommonActions.navigate({
       routeName,
       params,
     }),

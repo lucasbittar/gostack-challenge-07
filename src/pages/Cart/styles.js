@@ -97,10 +97,25 @@ export const CheckoutText = styled.Text`
 export const EmptyContainer = styled.View`
   align-items: center;
   justify-content: center;
+  padding: 24px;
 `;
 
 export const EmptyText = styled.Text`
-  font-size: 24px;
+  font-size: 21px;
   font-weight: bold;
   margin-top: 18px;
+  margin-bottom: 21px;
+`;
+
+export const ShopNowButtonText = styled.Text`
+  text-align: center;
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+`;
+
+export const ShopNowButton = styled.TouchableOpacity`
+  background: #7159c1;
+  padding: 12px;
+  border-radius: 4px;
 `;
