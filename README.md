@@ -3,7 +3,7 @@
 </h1>
 
 <h3 align="center">
-  GoStack Challenge 07: Store-like React App
+  GoStack Challenge 07: Store-like React Native App
 </h3>
 
 <div align="center">
